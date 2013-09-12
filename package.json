@@ -1,0 +1,10 @@
+{
+    "name": "application-auth-test",
+    "description": "Authentication tests for an authenticated webapp",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "3.x",
+        "swig": "1.x.x"
+    }
+}
