@@ -1,6 +1,6 @@
 {
-    "name": "application-auth-test",
-    "description": "Authentication tests for an authenticated webapp",
+    "name": "application-server",
+    "description": "Management tool web server",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
