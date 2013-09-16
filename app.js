@@ -1,11 +1,4 @@
 /**
- * Created with JetBrains WebStorm.
- * User: Etienne
- * Date: 04/09/13
- * Time: 11:56
- */
-
-/**
  * Main application script
  *
  * User: Etienne Dodat
