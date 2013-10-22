@@ -16,63 +16,75 @@
  * Date: 06/09/13
  */
 
+/*
+ TODO
+ Local memory-based storage seems a problem with clusterized node applications (multiple processes in parallel)
+ since child processes don’t share memory. It is still possible to “sync” data between child processes
+ using process.send from a child and worker.send from the master to broadcast info.
+ */
+
 var cluster = require('cluster');
 
-if (cluster.isMaster) {
+// Child processes will execute app.js
+cluster.setupMaster({
+    exec : "app.js"
+});
 
-    // Fork initial workers
-    var numCPUs = require('os').cpus().length;
-    var numProc = process.env.NUM_PROC || numCPUs;
-    for (var i = 0; i < numProc; i++) {
-        var worker = cluster.fork();
-    }
 
-    // Fork a new worker
-    cluster.on('disconnect', function(worker) {
-        console.error('worker disconnected');
-        cluster.fork();
-    });
-
-    // Fork a new worker
-    cluster.on('death', function(worker) {
-        console.log('worker died');
-        cluster.fork();
-    });
-
-} else {
-    console.log('worker '+process.pid+' started');
-
-    // LAUNCH APPLICATION IN CHILD PROCESS
-
-    // Wrap in a domain to catch errors.
-    // Documentation :  http://nodejs.org/api/domain.html.
-    var domain = require('domain').create();
-    domain.on('error', function(er) {
-        console.error('error in worker '+process.pid, er.stack);
-        // Note: we're in dangerous territory!
-        // By definition, something unexpected occurred,
-        // which we probably didn't want.
-        // Anything can happen now!  Be very careful!
-        try {
-            // make sure we close down within 30 seconds
-            var killtimer = setTimeout(function() {
-                process.exit(1);
-            }, 30000);
-            // But don't keep the process open just for that!
-            killtimer.unref();
-            // Let the master know we're dead.  This will trigger a
-            // 'disconnect' in the cluster master, and then it will fork
-            // a new worker.
-            cluster.worker.disconnect();
-        } catch (er2) {
-            // oh well, not much we can do at this point.
-            console.error('Error killing worker '+process.pid, er2.stack);
-        }
-    });
-
-    // Run
-    domain.run(function(){
-        require('./app.js');
-    });
-
+// Fork initial workers
+var numCPUs = require('os').cpus().length;
+var numProc = process.env.NUM_PROC || numCPUs;
+for (var i = 0; i < numProc; i++) {
+    var worker = cluster.fork();
 }
+
+/**
+ * Listener called when a worker is ready to receive requests.
+ */
+cluster.on('listening', function(worker, address) {
+    console.log('[CLUSTER] Worker', worker.id, 'listening on port', address.port);
+    // Perform actions after worker startup
+});
+
+/**
+ * Listener called when a worker is terminated.
+ */
+cluster.on('exit', function(worker, code, signal) {
+    // Perform actions after worker died
+    if( signal ) {
+        console.log('[CLUSTER] Worker', worker.id, 'was killed by signal', signal, '=> restarting...');
+    } else if( code !== 0 ) {
+        console.log('[CLUSTER] Worker', worker.id, 'exited with error code', code, '=> restarting...');
+    } else {
+        console.log('[CLUSTER] Worker', worker.id, 'exited with code 0 => restarting...');
+    }
+    // Respawn automatically
+    setTimeout(cluster.fork(), 1000); // timeout to prevent CPU explosion if worker is crashing too fast
+});
+
+/**
+ * Listener called when receiving a SIGINT signal (usually a Ctrl-C).
+ */
+process.on('SIGINT', function() {
+    console.log('[CLUSTER] Received SIGINT signal');
+    // Perform actions (asynchronous or not) before calling process.exit() to terminate program.
+    process.exit();
+});
+
+/**
+ * Listener called when receiving a SIGTERM signal (usually a "kill").
+ */
+process.on('SIGTERM', function() {
+    console.log('[CLUSTER] Received SIGTERM signal');
+    // Perform actions (asynchronous or not) before calling process.exit() to terminate program.
+    process.exit();
+});
+
+/**
+ * Listener called when master process is exiting (either with SIGINT, SIGTERM or programmatically).
+ */
+process.on('exit', function() {
+    // Do cleanup before exit.
+    // Note: asynchronous tasks won't be executed.
+});
+

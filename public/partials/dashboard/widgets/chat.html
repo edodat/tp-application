@@ -1,0 +1,20 @@
+<div class="widget-container" ng-class="{ flipped: flipped }" ng-controller="WidgetChatCtrl">
+    <div class="flipper">
+        <div class="widget-front">
+            <div class="widget-heading">
+                <span class="widget-title">Chat window</span>
+                <i class="icon-cog pull-right" title="Settings" ng-click="flipped = true"></i>
+            </div>
+            <div class="widget-body">
+                {{ widget }}<br>
+                id={{ id }}<br>
+                {{ nbUsers }} users connected.
+            </div>
+        </div>
+        <div class="widget-back">
+            <button class="btn btn-primary" ng-click="flipped = false">
+                Save
+            </button>
+        </div>
+    </div>
+</div>
