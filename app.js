@@ -40,27 +40,26 @@ app.param(['_id', 'user_id'], function(req, res, next, _id){
 });
 
 
-////////////
-// ROUTES //
-////////////
+/////////
+// API //
+/////////
 
-// PUBLIC ROUTES //
 
-app.post('/login', controllers.auth.login);
+// PUBLIC API //
+
+app.get('/api/ping', function(req, res){ res.json({ connection : 'successful' });});
+app.post('/api/login', controllers.auth.login);
 
 
 // AUTHENTICATION CHECKPOINT //
 // Routes defined AFTER the checkpoint will be authenticated.
 // The checkpoint authenticates requests based on a token contained in the Authorization header field.
-app.all('*', controllers.auth.authenticateToken);
+app.all('/api/*', controllers.auth.authenticateToken);
 
-// PRIVATE ROUTES //
-
-// ping
-app.get('/', function(req, res){ res.json({ connection : 'successful' });});
+// PRIVATE API //
 
 // create user
-app.post('/user', controllers.users.checkRole('admin'), controllers.users.createUser);
+app.post('/api/user', controllers.users.checkRole('admin'), controllers.users.createUser);
 
 
 //////////////////
