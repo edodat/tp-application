@@ -57,7 +57,8 @@ module.exports.login = function (req, res) {
                     token: token,
                     user: {
                         email: user.email,
-                        displayName: user.displayName
+                        displayName: user.displayName,
+                        isAdmin: User.hasRole(user, 'admin')
                     }
                 });
             });
