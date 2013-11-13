@@ -1,9 +1,11 @@
 module.exports = {
 
     transportOptions : {
-        service: "Gmail",
+        host: "smtp.free.fr", // hostname
+        secureConnection: true, // use SSL
+        port: 465,
         auth: {
-            user: "etienne.dodat@gmail.com",
+            user: "etienne.dodat",
             pass: "fggja7gq"
         }
     },
