@@ -13,7 +13,8 @@
 
 var controller = require('./controller.js'),
     User = require('../models/user.js'),
-    Token = require('../models/token.js');
+    Token = require('../models/token.js'),
+    Access = require('../models/access.js');
 
 /////////////
 // PRIVATE //
@@ -49,6 +50,8 @@ module.exports.login = function (req, res) {
             // step 3 : issue access token
             Token.issueToken(user, req.ip, function(err, token){
                 if (err) return controller.error(res, err);
+
+                Access.log(user, req.ip);
 
                 return controller.success(res, {
                     token: token,
