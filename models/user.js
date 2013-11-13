@@ -50,7 +50,7 @@ function sendAccess(user, isRenewal, callback){
             if(err) return callback(new Error('Technical error before sending activation email'));
 
             //TODO configurable links
-            var accessLink = 'https://'+process.env.COMPANY+'.app.tp.com/#/login/'+user._id+'/'+tokenValue;
+            var accessLink = 'https://'+process.env.COMPANY+'.app.lean-project.com/#/login/'+user._id+'/'+tokenValue;
             // send mail
             mail.sendAccess(user.email, accessLink, isRenewal, function(err){
                 if(err) return callback(new Error('Technical error while sending activation email'));

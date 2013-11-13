@@ -35,7 +35,7 @@ module.exports = function (app, express){
         app.use(express.bodyParser());
 
         //TODO add security middleware to check that company name in host name matches process.env.COMPANY
-        // To extract company name from host mycompany.api.tp.com :
+        // To extract company name from host mycompany.api.domain.com :
         //      app.set('subdomain offset', 3);
         //      ...
         //      var companyName = req.subdomains[0];
