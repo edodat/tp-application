@@ -23,6 +23,6 @@ angular.module('app').controller('DashboardCtrl', function($scope){
     ];
 
     $scope.getTemplateUrl = function(widget){
-        return 'partials/dashboard/widgets/'+widget.type+'.html';
+        return 'static/partials/dashboard/widgets/'+widget.type+'.html';
     }
 });

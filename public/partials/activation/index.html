@@ -1,0 +1,48 @@
+<script type="text/ng-template" id="activationModal">
+    <div class="modal-header">
+        <h3 class="row-fluid" ng-show="state == 'ACTIVATING' || state == 'NO TOKEN' || state == 'INVALID TOKEN' || state == 'SENT' || state == 'FORM'">
+            <span class="span4 text-center muted"><i class="icon-edit-sign"></i> Register</span>
+            <span class="span4 text-center text-info"><i class="icon-check-sign"></i> Activate</span>
+            <span class="span4 text-center muted"><i class="icon-smile"></i> Finish</span>
+        </h3>
+        <h3 class="row-fluid" ng-show="state == 'ALREADY ACTIVE' || state == 'ACTIVE'">
+            <span class="span4 text-center muted"><i class="icon-edit-sign"></i> Register</span>
+            <span class="span4 text-center muted"><i class="icon-check-sign"></i> Activate</span>
+            <span class="span4 text-center text-success"><i class="icon-smile"></i> Finish</span>
+        </h3>
+    </div>
+    <div class="modal-body">
+        <div ng-show="error">
+            <alert type="'error'"><i class="icon-warning-sign"></i> {{ error }}</alert>
+        </div>
+        <div ng-show="state == 'NO TOKEN'">
+            <h4 class="text-warning">Have you already activated your company account ?</h4>
+            An email has been sent to the email address provided on registration.<br>
+            Please click on the <strong>activation link</strong> in this email to activate your company account.<br>
+            <br>
+            If you wish to receive another activation email on the same address, please click on the button below.
+        </div>
+        <div ng-show="state == 'ACTIVATING'">
+            <h4 class="text-center"><i class="icon-spinner icon-spin"></i> Activating account</h4>
+        </div>
+        <div ng-show="state == 'INVALID TOKEN'">
+            <h4 class="text-warning">Your activation link is not valid.</h4>
+            Please note that activation links expire after a short period of time for your account security.<br>
+            <br>
+            If you wish to renew your activation link and receive it in another activation email on the same address, please click on the button below.
+        </div>
+        <div ng-show="state == 'SENT'">
+            <h4 class="text-success">An activation email has been sent to the email address provided on registration.</h4>
+            Please click on the <strong>activation link</strong> in this email to activate your company account.<br>
+            For your account security, activation links expire after a short period of time.
+        </div>
+        <div ng-show="state == 'ACTIVE'">
+            <h4 class="text-success">Your company account is now active.</h4>
+            An administrator account has been automatically created and access details have just been sent to the email address provided on registration.<br>
+            Please click on the <strong>access link</strong> in this email to access your interface.
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-show="state == 'NO TOKEN' || state == 'INVALID TOKEN'" ng-click="sendActivationEmail()"><i class="icon-envelope"></i> Send activation email</button>
+    </div>
+</script>

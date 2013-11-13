@@ -13,8 +13,7 @@
 
 var controller = require('./controller.js'),
     User = require('../models/user.js'),
-    Token = require('../models/token.js'),
-    async = require('async');
+    Token = require('../models/token.js');
 
 /////////////
 // PRIVATE //
@@ -25,73 +24,82 @@ var controller = require('./controller.js'),
 ////////////
 
 /**
- * Authenticates user with username and password.
- * If valid, returns user and token.
+ * Authenticates user with email and password.
+ * If valid, returns token.
  * If invalid, returns 401.
  */
 module.exports.login = function (req, res) {
-    var username = req.body.username;
+    var email = req.body.email;
     var password = req.body.password;
 
-    if (!username || !password) {
+    if (!email || !password) {
         return controller.unauthorized(res, 'Missing credentials');
     }
 
-    async.waterfall([
-        // step 1 : retrieve user
-        function (next){
-            User.findOne({ username: username }, function(err, user){
-                if (err) return controller.error(res, err);
-                if (!user) return controller.unauthorized(res, 'Invalid credentials');
-                next(null, user);
-            });
-        },
-        // step 2 : check password
-        function (user, next){
-            User.authenticatePassword(user, password, function(err, valid){
-                if (err) return controller.error(res, err);
-                if (!valid) return controller.unauthorized(res, 'Invalid credentials');
-                next(null, user);
-            });
-        },
-        // step 3 : issue access token
-        function (user, next){
-            Token.issueToken(user, req.ip, function (err, token){
-                if (err || !token) return controller.error(res, err);
-                next(null, user, token);
-            });
-        }
-    ], function (err, user, token){
-            return controller.success(res, { user: user, token: token});
-    });
-
-/* without async:
     // step 1 : retrieve user
-    User.findOne({ username: username }, function(err, user){
+    User.findOne({ email: email }, function(err, user){
         if (err) return controller.error(res, err);
-
-        if (!user) {
-            return controller.unauthorized(res, 'Invalid credentials');
-        }
+        if (!user) return controller.unauthorized(res, 'Invalid credentials');
 
         // step 2 : check password
         User.authenticatePassword(user, password, function(err, valid){
             if (err) return controller.error(res, err);
-
-            if (!valid) {
-                return controller.unauthorized(res, 'Invalid credentials');
-            }
+            if (!valid) return controller.unauthorized(res, 'Invalid credentials');
 
             // step 3 : issue access token
-            Token.issueToken(user, req.ip, function (err, token){
-                if (err || !token) return controller.error(res, err);
+            Token.issueToken(user, req.ip, function(err, token){
+                if (err) return controller.error(res, err);
 
-                return controller.success(res, { user: user, token: token});
+                return controller.success(res, {
+                    token: token,
+                    user: {
+                        email: user.email,
+                        displayName: user.displayName
+                    }
+                });
             });
         });
     });
-*/
 };
+
+/**
+ * Sets user's password
+ */
+module.exports.set = function(req, res){
+    var email = req.body.email;
+    var resetToken = req.body.token;
+    var password = req.body.password;
+
+    User.setPassword(email, resetToken, password, controller.wrapup(res));
+}
+
+/**
+ * Validates Reset Password token and returns user's credential (email)
+ */
+module.exports.validateResetToken = function(req, res){
+    var userId = req.body.user;
+    var resetToken = req.body.token;
+
+    User.findById(userId, function(err, user){
+        if (err) return controller.error(res, err);
+        if (!user) return controller.error(res, new Error('User not found'));
+
+        User.validateResetToken(user, resetToken, function(err, valid){
+            if (err) return controller.error(res, err);
+            if (!valid) return controller.error(res, new Error('Invalid token'));
+
+            return controller.success(res, { email: user.email });
+        });
+    });
+}
+
+/**
+ * Resets user's password and sends password renewal link
+ */
+module.exports.reset = function(req, res){
+    var email = req.body.email;
+    User.resetPassword(email, controller.wrapup(res));
+}
 
 /**
  * Middleware to validate access token (in Authorization header).
@@ -125,3 +133,17 @@ module.exports.authenticateToken = function (req, res, next) {
         });
     });
 };
+
+/**
+ * Middleware to check authenticated user's required role
+ */
+module.exports.checkRole = function (role){
+    return function (req, res, next){
+        if (User.hasRole(req.user, role)){
+            next();
+        } else {
+            controller.unauthorized(res, 'Insufficient rights');
+        }
+    };
+};
+

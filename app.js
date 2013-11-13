@@ -23,7 +23,7 @@ var http = require('http'),
     app = express();
 
 var controllers = require('./controllers');
-var Model = require('./models/model.js');
+var model = require('./models/model.js');
 
 
 ///////////////////
@@ -35,7 +35,7 @@ require('./config/express.js')(app, express);
 
 // Converts all incoming "_id" string parameters to MongoDB ObjectIDs
 app.param(['_id', 'user_id'], function(req, res, next, _id){
-    req.params._id = Model.ObjectId(_id);
+    req.params._id = model.ObjectId(_id);
     next();
 });
 
@@ -48,7 +48,13 @@ app.param(['_id', 'user_id'], function(req, res, next, _id){
 // PUBLIC API //
 
 app.get('/api/ping', function(req, res){ res.json({ connection : 'successful' });});
-app.post('/api/login', controllers.auth.login);
+app.post('/api/sendactivationemail', controllers.activation.sendActivationEmail);
+app.post('/api/activate', controllers.activation.activate);
+
+app.post('/api/auth/login', controllers.auth.login);
+app.post('/api/auth/reset', controllers.auth.reset);
+app.post('/api/auth/set/validate', controllers.auth.validateResetToken);
+app.post('/api/auth/set', controllers.auth.set);
 
 
 // AUTHENTICATION CHECKPOINT //
@@ -59,7 +65,7 @@ app.all('/api/*', controllers.auth.authenticateToken);
 // PRIVATE API //
 
 // create user
-app.post('/api/user', controllers.users.checkRole('admin'), controllers.users.createUser);
+app.post('/api/users', controllers.auth.checkRole('admin'), controllers.users.createUser);
 
 
 //////////////////

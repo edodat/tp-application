@@ -1,0 +1,68 @@
+<script type="text/ng-template" id="loginModal">
+    <div class="modal-header">
+        <h3 class="row-fluid" >
+            <span class="text-info"><i class="icon-user"></i> Authentication</span>
+        </h3>
+    </div>
+    <div class="modal-body">
+        <div ng-show="error">
+            <alert type="'error'"><i class="icon-warning-sign"></i> {{ error }}</alert>
+        </div>
+        <div ng-show="state == 'TOKEN'">
+            <h4 class="text-center"><i class="icon-spinner icon-spin"></i> Validating access</h4>
+        </div>
+        <div ng-show="state == 'INVALID TOKEN'">
+            <h4 class="text-warning">Your access link is not valid.</h4>
+            Please note that access links expire after a short period of time for your account security.<br>
+            <br>
+            If you wish to renew your access link, please provide your email address and click on the button below.<br>
+            <br>
+            <form name="resendForm" novalidate>
+                <input id="email" name="email" type="email" placeholder="Enter your email address" ng-model="user.email" ng-disabled="processing" required />
+                <span class="help-inline" ng-show="resendForm.email.$dirty && resendForm.email.$error.required">This field is required.</span>
+            </form>
+        </div>
+        <div ng-show="state == 'RESET'">
+            <h4 class="text-success">An access link has just been sent to your email address.</h4>
+            Please click on the <strong>access link</strong> in this email to renew your password.
+        </div>
+        <div ng-show="state == 'FORM'">
+            <form name="loginForm" novalidate>
+                <div class="control-group">
+                    <input id="email" name="email" type="email" placeholder="Enter your email address" ng-model="user.email" ng-disabled="processing" required />
+                    <span class="help-inline" ng-show="loginForm.email.$dirty && loginForm.email.$error.required">This field is required.</span>
+                    <br>
+                    <input id="password" name="password" type="password" placeholder="Enter your password" ng-model="user.password" ng-disabled="processing" required />
+                    <span class="help-inline" ng-show="loginForm.password.$dirty && loginForm.password.$error.required">This field is required.</span>
+                </div>
+            </form>
+        </div>
+        <div ng-show="state == 'SET FORM'">
+            <form name="setForm" novalidate>
+                <div class="control-group">
+                    <input id="email" name="email" type="email" placeholder="Enter your email address" ng-model="user.email" ng-disabled="true" required />
+                    <br>
+                    <input id="password" name="password" type="password" placeholder="Choose a new password" ng-model="user.password" ng-disabled="processing" required />
+                    <span class="help-inline" ng-show="setForm.password.$dirty && setForm.password.$error.required">This field is required.</span>
+                    <br>
+                    <input id="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confirm password" ng-model="passwordConfirm" ng-disabled="processing" required />
+                    <span class="help-inline" ng-show="setForm.passwordConfirm.$dirty && (passwordConfirm != user.password)">Must be identical to password.</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-show="state == 'INVALID TOKEN'" ng-click="resetPassword()" ng-disabled="resendForm.$invalid || processing">
+            <i class="icon-envelope"></i> Send access email
+        </button>
+
+        <button class="btn btn-success btn-large" ng-show="state == 'FORM'" ng-click="login()" ng-disabled="loginForm.$invalid || processing">
+            <i class="icon-signin"></i> Log in
+        </button>
+        <button class="btn btn-link pull-left" ng-click="resetPassword()" ng-disabled="processing">Forgot your<br>password ?</button>
+
+        <button class="btn btn-success btn-large" ng-show="state == 'SET FORM'" ng-click="setPassword()" ng-disabled="setForm.$invalid || (passwordConfirm != user.password) || processing">
+            <i class="icon-signin"></i> Log in
+        </button>
+    </div>
+</script>

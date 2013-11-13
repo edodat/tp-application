@@ -29,6 +29,22 @@
     </head>
     <body>
 
+        <!-- Navbar -->
+        <div class="navbar navbar-fixed-top navbar-inverse" ng-show="user" ng-cloak>
+            <div class="navbar-inner">
+                <ul class="nav">
+                    <li class="active"><a href="#"><i class="icon-dashboard"></i> Dashboard</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#/people"><i class="icon-group"></i> People</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#/projects"><i class="icon-tasks"></i> Projects</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li class="active"><a href="#"><i class="icon-user"></i> {{ user.displayName }}</a></li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Site content -->
         <div class="container" ng-view>
         </div>
