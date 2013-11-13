@@ -27,7 +27,7 @@
  */
 module.exports.success = function (res, obj) {
     res.type('json');
-    res.json(obj);
+    res.json(obj || { ok: true } );
 };
 
 /**
@@ -63,4 +63,15 @@ module.exports.notFound = function (res, message) {
     res.json(404, { error: message });
 };
 
-
+/**
+ * Helper function to use as a last callback before rendering.
+ * Controller will check error returned, otherwise returns object.
+ *
+ * @param res : HTTP response
+ */
+module.exports.wrapup = function (res){
+    return function(err, obj){
+        if (err) return module.exports.error(res, err);
+        return module.exports.success(res, obj);
+    }
+};
