@@ -30,7 +30,7 @@
     <body>
 
         <!-- Navbar -->
-        <div ng-include="'static/partials/navbar.html'"></div>
+        <div ng-include="'static/partials/navbar.html'" ng-controller="NavbarCtrl"></div>
 
         <!-- Site content -->
         <div class="container" ng-view>
@@ -62,6 +62,8 @@
         <!-- Custom Javascript -->
         <script src="static/angular/angular-app.js"></script>
 
+        <script src="static/angular/controllers/navbar.js"></script>
+
         <script src="static/angular/controllers/activation.js"></script>
         <script src="static/angular/controllers/auth.js"></script>
 
@@ -69,6 +71,7 @@
         <script src="static/angular/controllers/widgets/chat.js"></script>
         <script src="static/angular/controllers/widgets/sprint.js"></script>
 
+        <script src="static/angular/controllers/people.js"></script>
 
     </body>
 </html>

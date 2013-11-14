@@ -2,9 +2,9 @@
 
 angular.module('app').controller('NavbarCtrl', function($scope, $location){
     $scope.links = [
-        { name: 'Dashboard', href: '#/', icon: 'icon-dashboard', active: true },
-        { name: 'People', href: '#/people', icon: 'icon-group' },
-        { name: 'Projects', href: '#/projects', icon: 'icon-tasks' }
+        { name: 'Dashboard', href: '#/', icon: 'icon-dashboard icon-large', active: true },
+        { name: 'People', href: '#/people', icon: 'icon-group icon-large' },
+        { name: 'Projects', href: '#/projects', icon: 'icon-tasks icon-large' }
     ];
 
     $scope.$on('$routeChangeSuccess', function () {

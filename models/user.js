@@ -54,7 +54,7 @@ function sendAccess(user, isRenewal, callback){
             // send mail
             mail.sendAccess(user.email, accessLink, isRenewal, function(err){
                 if(err) return callback(new Error('Technical error while sending activation email'));
-                console.log('[ADMIN] Access email sent for user', user.email);
+                console.log('[APP] Access email sent for user', user.email);
                 return callback(null);
             });
         });
@@ -93,7 +93,16 @@ module.exports.create = function (email, displayName, isAdmin, callback){
         module.exports.save(user, function(err){
             if (err) return callback(err);
 
-            sendAccess(user, false, callback);
+            sendAccess(user, false, function(err){
+                if (err) return callback(err);
+
+                return callback(null, {
+                    _id: user._id,
+                    email: user.email,
+                    displayName: user.displayName,
+                    roles: user.roles
+                });
+            });
         });
     });
 };

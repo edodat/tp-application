@@ -4,10 +4,11 @@ angular.module('app', ['ui.bootstrap', 'restangular'])
     .config(function($routeProvider, $httpProvider, RestangularProvider) {
         // configure routes
         $routeProvider
-            .when('/activate/:token',       { templateUrl: 'static/partials/activation/', controller: 'ActivationCtrl', noAuth: true })
-            .when('/login/:userId/:token',  { templateUrl: 'static/partials/auth/', controller: 'AuthCtrl', noAuth: true })
-            .when('/login',                 { templateUrl: 'static/partials/auth/', controller: 'AuthCtrl', noAuth: true })
-            .when('/',                      { templateUrl: 'static/partials/dashboard/', controller: 'DashboardCtrl' })
+            .when('/activate/:token',       { templateUrl: 'static/partials/activation/',   controller: 'ActivationCtrl', noAuth: true })
+            .when('/login/:userId/:token',  { templateUrl: 'static/partials/auth/',         controller: 'AuthCtrl', noAuth: true })
+            .when('/login',                 { templateUrl: 'static/partials/auth/',         controller: 'AuthCtrl', noAuth: true })
+            .when('/',                      { templateUrl: 'static/partials/dashboard/',    controller: 'DashboardCtrl' })
+            .when('/people',                { templateUrl: 'static/partials/people/',       controller: 'PeopleCtrl' })
             .otherwise({ redirectTo: '/' });
 
         // On AJAX calls return, intercept 401 errors to redirect to login page

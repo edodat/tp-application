@@ -20,6 +20,12 @@ var controller = require('./controller.js'),
 // PUBLIC //
 ////////////
 
+/**
+ * Retrieves users
+ */
+module.exports.getUsers = function(req, res){
+    User.find({}, { email:1, displayName:1, roles:1 }).sort({ displayName: 1 }, controller.wrapup(res));
+}
 
 /**
  * Creates a user

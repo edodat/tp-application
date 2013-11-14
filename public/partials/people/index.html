@@ -1,0 +1,22 @@
+<!-- Add user button -->
+<button class="btn btn-success" ng-click="createUser()">
+    <i class="icon-plus-sign"></i> Add a member
+</button>
+
+<!-- Users list -->
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Administrator</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="user in users | orderBy:'displayName'">
+        <td><strong>{{ user.displayName }}</strong></td>
+        <td>{{ user.email }}</td>
+        <td>{{ isAdmin(user) }}</td>
+    </tbody>
+</table>
+

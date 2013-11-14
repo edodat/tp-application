@@ -1,32 +1,25 @@
-<!-- DRAFT -->
-
-<script type="text/ng-template" id="addUserModal">
-    <div class="modal-header">
-
+<!-- Create user modal -->
+<div class="modal-header">
+    <h3>Add a member</h3>
+</div>
+<div class="modal-body">
+    <div ng-show="error">
+        <alert type="'error'"><i class="icon-warning-sign"></i> {{ error }}</alert>
     </div>
-    <div class="modal-body">
-        <div ng-show="error">
-            <alert type="'error'"><i class="icon-warning-sign"></i> {{ error }}</alert>
-        </div>
-        <div class="row-fluid">
-            <form name="addUserForm" novalidate>
-                <div class="control-group span10 offset2" ng-class="{ error: addUserForm.email.$dirty && (addUserForm.email.$error.required || addUserForm.email.$error.email)} ">
-                    <input id="name" name="name" type="text" placeholder="Enter full name, e.g. Greg Egan " ng-model="user.name" required />
-                    <span class="help-inline" ng-show="addUserForm.name.$dirty && addUserForm.name.$error.required">This field is required.</span>
-                    <br>
-                    <input id="email" name="email" type="email" placeholder="Enter email address" ng-model="user.email" required />
-                    <span class="help-inline" ng-show="addUserForm.email.$dirty && addUserForm.email.$error.required">This field is required.</span>
-                    <span class="help-inline" ng-show="addUserForm.email.$error.email">Must be valid.</span>
-                    <br>
-                    <input id="password" name="password" type="password" placeholder="Enter password" ng-model="user.password" required />
-                    <br>
-                    <input id="passwordConfirm" name="passwordConfirm" type="password" placeholder="Confirm password" ng-model="passwordConfirm" required />
-                    <span class="help-inline" ng-show="addUserForm.passwordConfirm.$dirty && (passwordConfirm != user.password)">Must be identical to password.</span>
-                </div>
-            </form>
-        </div>
+    <div class="row-fluid">
+        <form name="addUserForm" novalidate>
+            <div class="control-group span10 offset2" ng-class="{ error: addUserForm.email.$dirty && (addUserForm.email.$error.required || addUserForm.email.$error.email)} ">
+                <input id="name" name="name" type="text" placeholder="Enter full name, e.g. Greg Egan " ng-model="user.displayName" ng-disabled="processing" required />
+                <span class="help-inline" ng-show="addUserForm.name.$dirty && addUserForm.name.$error.required">This field is required.</span>
+                <br>
+                <input id="email" name="email" type="email" placeholder="Enter email address" ng-model="user.email" ng-disabled="processing" required />
+                <span class="help-inline" ng-show="addUserForm.email.$dirty && addUserForm.email.$error.required">This field is required.</span>
+                <span class="help-inline" ng-show="addUserForm.email.$error.email">Must be valid.</span>
+            </div>
+        </form>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="createUser()" ng-disabled="addUserForm.$invalid || (passwordConfirm != user.password)">Create user</button>
-    </div>
-</script>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="createUser()" ng-disabled="addUserForm.$invalid || processing">Create user</button>
+    <button class="btn btn-sm btn-link" ng-click="cancel()" ng-disabled="processing">Cancel</button>
+</div>

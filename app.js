@@ -64,7 +64,7 @@ app.all('/api/*', controllers.auth.authenticateToken);
 
 // PRIVATE API //
 
-// create user
+app.get('/api/users', controllers.users.getUsers);
 app.post('/api/users', controllers.auth.checkRole('admin'), controllers.users.createUser);
 
 
