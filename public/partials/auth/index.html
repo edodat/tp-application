@@ -59,7 +59,7 @@
         <button class="btn btn-success btn-large" ng-show="state == 'FORM'" ng-click="login()" ng-disabled="loginForm.$invalid || processing">
             <i class="icon-signin"></i> Log in
         </button>
-        <button class="btn btn-link pull-left" ng-click="resetPassword()" ng-disabled="processing">Forgot your<br>password ?</button>
+        <button class="btn btn-link pull-left" ng-show="state == 'FORM'" ng-click="resetPassword()" ng-disabled="processing">Forgot your<br>password ?</button>
 
         <button class="btn btn-success btn-large" ng-show="state == 'SET FORM'" ng-click="setPassword()" ng-disabled="setForm.$invalid || (passwordConfirm != user.password) || processing">
             <i class="icon-signin"></i> Log in
