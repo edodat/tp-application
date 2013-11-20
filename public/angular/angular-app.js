@@ -22,6 +22,7 @@ angular.module('app', ['ui.bootstrap', 'restangular'])
                     // Error: check the error status to get only the 401
                     function(response) {
                         if (response.status === 401){
+                            //TODO logout
                             $location.path('/login');
                         }
                         return $q.reject(response);
@@ -44,6 +45,7 @@ angular.module('app', ['ui.bootstrap', 'restangular'])
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
             if (!$rootScope.user && !next.noAuth) {
                 console.log('Redirection to login page');
+                $rootScope.redirectTo = $location.path();
                 $location.path('/login');
             }
         });

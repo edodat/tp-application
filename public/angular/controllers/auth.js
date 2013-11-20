@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AuthCtrl', function($scope, $modal){
+angular.module('app').controller('AuthCtrl', function($scope, $rootScope, $location, $modal){
 
     $modal.open({
         templateUrl: 'loginModal',
@@ -8,11 +8,20 @@ angular.module('app').controller('AuthCtrl', function($scope, $modal){
         backdrop: 'static',
         keyboard: false,
         controller: 'LoginFormCtrl'
+    }).result.then(function(){
+        // redirect to previous page or dashboard by default
+        if ($rootScope.redirectTo){
+            var redirectTo = $rootScope.redirectTo;
+            delete $rootScope.redirectTo;
+            $location.path(redirectTo);
+        } else {
+            $location.path('/');
+        }
     });
 
 });
 
-angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, $routeParams, $http, $location, Restangular, $modalInstance) {
+angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, $routeParams, $http, Restangular, $modalInstance) {
     $scope.user = {};
     $scope.state = '';
     $scope.processing = false;
@@ -54,9 +63,6 @@ angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, 
 
                 $scope.processing = false;
                 $modalInstance.close();
-
-                // redirect to dashboard
-                $location.path('/');
             },
             function error(response){
                 $scope.processing = false;
