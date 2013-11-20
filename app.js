@@ -65,7 +65,9 @@ app.all('/api/*', controllers.auth.authenticateToken);
 // PRIVATE API //
 
 app.get('/api/users', controllers.users.getUsers);
-app.post('/api/users', controllers.auth.checkRole('admin'), controllers.users.createUser);
+app.post('/api/users', controllers.auth.checkIsAdmin(), controllers.users.createUser);
+app.put('/api/users/:_id', controllers.auth.checkIsAdmin(), controllers.users.updateUser);
+app.del('/api/users/:_id', controllers.auth.checkIsAdmin(), controllers.users.deleteUser);
 
 
 //////////////////

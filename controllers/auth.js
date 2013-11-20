@@ -56,9 +56,10 @@ module.exports.login = function (req, res) {
                 return controller.success(res, {
                     token: token,
                     user: {
+                        _id: user._id,
                         email: user.email,
                         displayName: user.displayName,
-                        isAdmin: User.hasRole(user, 'admin')
+                        isAdmin: user.isAdmin
                     }
                 });
             });
@@ -141,9 +142,9 @@ module.exports.authenticateToken = function (req, res, next) {
 /**
  * Middleware to check authenticated user's required role
  */
-module.exports.checkRole = function (role){
+module.exports.checkIsAdmin = function (){
     return function (req, res, next){
-        if (User.hasRole(req.user, role)){
+        if (User.isAdmin(req.user)){
             next();
         } else {
             controller.unauthorized(res, 'Insufficient rights');

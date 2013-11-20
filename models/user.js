@@ -86,8 +86,7 @@ module.exports.create = function (email, displayName, isAdmin, callback){
         var user = {};
         user.email = email;
         user.displayName = displayName;
-        user.roles = [];
-        if (isAdmin) user.roles.push('admin');
+        user.isAdmin = isAdmin;
 
         // Save user to database
         module.exports.save(user, function(err){
@@ -100,8 +99,42 @@ module.exports.create = function (email, displayName, isAdmin, callback){
                     _id: user._id,
                     email: user.email,
                     displayName: user.displayName,
-                    roles: user.roles
+                    isAdmin: user.isAdmin
                 });
+            });
+        });
+    });
+};
+
+/**
+ * Updates a user.
+ *
+ * @param email
+ * @param displayName
+ * @param isAdmin
+ * @param callback
+ */
+module.exports.updateUser = function (userId, email, displayName, isAdmin, callback){
+    module.exports.findById(userId, function(err, user){
+        if (err) return callback(err);
+        if (!user) {
+            return callback(new Error('User not found'));
+        }
+
+        //TODO if email changes, reset password ?
+        user.email = email;
+        user.displayName = displayName;
+        user.isAdmin = isAdmin;
+
+        // Save user to database
+        module.exports.save(user, function(err){
+            if (err) return callback(err);
+
+            return callback(null, {
+                _id: user._id,
+                email: user.email,
+                displayName: user.displayName,
+                isAdmin: user.isAdmin
             });
         });
     });
@@ -171,7 +204,7 @@ module.exports.authenticatePassword = function(user, password, callback){
  * @param user
  * @param role
  */
-module.exports.hasRole = function (user, role){
-    return (user.roles.indexOf(role) > -1);
+module.exports.isAdmin = function (user){
+    return user.isAdmin;
 };
 
