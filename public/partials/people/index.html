@@ -2,7 +2,7 @@
 <alert ng-repeat="error in errors" type="'error'" close="errors.splice($index, 1)"><i class="icon-warning-sign"></i> {{error}}</alert>
 
 <!-- Toolbar -->
-<div class="well well-small" ng-show="user.isAdmin">
+<div class="well well-small" ng-show="isAdmin()">
     <!-- Add user button -->
     <button class="btn btn-success" ng-click="createUser()">
         <i class="icon-plus-sign"></i> Add a member
@@ -16,18 +16,17 @@
         <th>Name</th>
         <th>Email</th>
         <th>Administrator</th>
-        <th ng-show="user.isAdmin">Actions</th>
+        <th ng-show="isAdmin()">Actions</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="member in users | orderBy:'displayName'">
-        <td><strong>{{ member.displayName }}</strong> <span ng-show="isYou(member)" class="badge badge-info">You</span></td>
-        <td>{{ member.email }}</td>
-        <td>{{ member.isAdmin }}</td>
-        <td ng-show="user.isAdmin">
-            <button class="btn btn-sm btn-default" ng-click="editUser(member)"><i class="icon-edit"></i> Edit</button>
-            <button class="btn btn-sm btn-warning" ng-show="!isYou(member)" ng-click="disableUser(member)"><i class="icon-ban-circle"></i> Disable</button>
-            <button class="btn btn-sm btn-danger" ng-show="!isYou(member)" ng-click="deleteUser(member)"><i class="icon-trash"></i> Delete</button>
+    <tr ng-repeat="user in users | orderBy:'displayName'">
+        <td><strong>{{ user.displayName }}</strong> <span ng-show="isLoggedIn(user)" class="badge badge-info">You</span></td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.isAdmin }}</td>
+        <td ng-show="isAdmin()">
+            <button class="btn btn-sm btn-default" ng-click="editUser(user)"><i class="icon-edit"></i> Edit</button>
+            <button class="btn btn-sm btn-danger" ng-show="!isLoggedIn(user)" ng-click="deleteUser(user)"><i class="icon-trash"></i> Delete</button>
         </td>
     </tbody>
 </table>

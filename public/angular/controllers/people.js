@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PeopleCtrl', function($rootScope, $scope, Restangular, $modal){
+angular.module('app').controller('PeopleCtrl', function($rootScope, $scope, authService, Restangular, $modal){
 
     $scope.Users = Restangular.all('users');
     $scope.Users.getList().then(function(users) {
@@ -35,10 +35,6 @@ angular.module('app').controller('PeopleCtrl', function($rootScope, $scope, Rest
 
     };
 
-    $scope.disableUser = function(user){
-
-    };
-
     $scope.deleteUser = function(user){
         user.remove().then(function(){
             _.remove($scope.users, { _id: user._id });
@@ -47,9 +43,8 @@ angular.module('app').controller('PeopleCtrl', function($rootScope, $scope, Rest
         });
     };
 
-    $scope.isYou = function(user){
-        return (user._id == $rootScope.user._id);
-    };
+    $scope.isLoggedIn = authService.isLoggedIn;
+    $scope.isAdmin = authService.isAdmin
 
 });
 

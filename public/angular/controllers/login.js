@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AuthCtrl', function($scope, $rootScope, $location, $modal){
+angular.module('app').controller('LoginCtrl', function($scope, $rootScope, $location, $modal, authService){
 
     $modal.open({
         templateUrl: 'loginModal',
@@ -9,19 +9,12 @@ angular.module('app').controller('AuthCtrl', function($scope, $rootScope, $locat
         keyboard: false,
         controller: 'LoginFormCtrl'
     }).result.then(function(){
-        // redirect to previous page or dashboard by default
-        if ($rootScope.redirectTo){
-            var redirectTo = $rootScope.redirectTo;
-            delete $rootScope.redirectTo;
-            $location.path(redirectTo);
-        } else {
-            $location.path('/');
-        }
+        authService.redirectAfterLogin();
     });
 
 });
 
-angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, $routeParams, $http, Restangular, $modalInstance) {
+angular.module('app').controller('LoginFormCtrl', function ($scope, $routeParams, authService, Restangular, $modalInstance) {
     $scope.user = {};
     $scope.state = '';
     $scope.processing = false;
@@ -57,9 +50,8 @@ angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, 
         Restangular.allUrl('auth/login').post($scope.user)
             .then(
             function success(response){
-                $rootScope.user = response.user;
-                $rootScope.token = response.token;
-                $http.defaults.headers.common['Authorization'] = $rootScope.token;
+                // Store auth info in client-side "session"
+                authService.login(response.user, response.token);
 
                 $scope.processing = false;
                 $modalInstance.close();
@@ -96,7 +88,7 @@ angular.module('app').controller('LoginFormCtrl', function ($scope, $rootScope, 
         $scope.processing = true;
         Restangular.allUrl('auth/set').post({ email: $scope.user.email, password: $scope.user.password, token: token })
             .then(
-            function success(response){
+            function success(){
                 $scope.processing = false;
                 $scope.state = 'SET FORM';
 

@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-top navbar-inverse" ng-show="user" ng-cloak>
+<div class="navbar navbar-fixed-top navbar-inverse" ng-show="isLoggedIn()" ng-cloak>
     <div class="navbar-inner">
         <ul class="nav">
             <li ng-repeat="link in links" ng-class="{ active: link.active }">
@@ -6,14 +6,23 @@
             </li>
         </ul>
         <ul class="nav pull-right">
-            <li class="active">
-                <a href="#">
+            <li class="active dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="icon-stack">
-                        <i ng-show="user.isAdmin" class="icon-sun icon-stack-base"></i>
+                        <i ng-show="isAdmin()" class="icon-sun icon-stack-base"></i>
                         <i class="icon-user"></i>
                     </span>
-                    {{ user.displayName }}
+                    {{ getUserName() }}
+                    <b class="caret"></b>
                 </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="editProfile()"><i class="icon-edit"></i> Edit my profile</a>
+                    </li>
+                    <li>
+                        <a ng-click="logout()"><i class="icon-signout"></i> Log out</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
