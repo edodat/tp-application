@@ -16,6 +16,9 @@
 // INITIALIZATION //
 ////////////////////
 
+// Checks environment configuration
+require('./agent/env.js');
+
 if (! process.env.HOSTNAME) {
     console.error('[AGENT] HOSTNAME environment variable not set. Process will exit.');
     process.exit(0);
