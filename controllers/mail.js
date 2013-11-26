@@ -20,6 +20,9 @@ var nodemailer = require('nodemailer'),
 var smtpTransport = nodemailer.createTransport("SMTP", config.transportOptions);
 
 function send(recipient, subject, text, HTML, callback){
+    // use diversion address for all messages in test mode
+    recipient = config.DIVERSION_TEST_ADDRESS || recipient;
+
     var mailOptions = {
         from: config.FROM, // sender address
         to: recipient, // list of receivers
