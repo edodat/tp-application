@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PeopleCtrl', function($rootScope, $scope, authService, Restangular, $modal){
+angular.module('app').controller('PeopleCtrl', function($scope, authService, Restangular, $modal){
 
     $scope.Users = Restangular.all('users');
     $scope.Users.getList().then(function(users) {
