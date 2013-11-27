@@ -12,24 +12,25 @@
 <!-- Users list -->
 <table class="table table-hover table-bordered">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th ng-show="isAdmin()">Actions</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th ng-show="isAdmin()">Actions</th>
+        </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users | orderBy:'displayName'">
-        <td>
-            <span ng-show="isLoggedIn(user)" class="badge badge-info">You</span>
-            <strong>{{ user.displayName }}</strong>
-            <span ng-show="user.isAdmin" class="label label-default">administrator</span>
-        </td>
-        <td>{{ user.email }}</td>
-        <td ng-show="isAdmin()">
-            <button class="btn btn-sm btn-default" ng-click="editUser(user)"><i class="icon-edit"></i> Edit</button>
-            <button class="btn btn-sm btn-danger" ng-show="!isLoggedIn(user)" ng-click="deleteUser(user)"><i class="icon-trash"></i> Delete</button>
-        </td>
+        <tr ng-repeat="user in users | orderBy:'displayName'">
+            <td>
+                <span ng-show="isLoggedIn(user)" class="badge badge-info">You</span>
+                <strong>{{ user.displayName }}</strong>
+                <span ng-show="user.isAdmin" class="label label-default">administrator</span>
+            </td>
+            <td>{{ user.email }}</td>
+            <td ng-show="isAdmin()">
+                <button class="btn btn-sm btn-default" ng-click="editUser(user)"><i class="icon-edit"></i> Edit</button>
+                <button class="btn btn-sm btn-danger" ng-show="!isLoggedIn(user)" ng-click="deleteUser(user)"><i class="icon-trash"></i> Delete</button>
+            </td>
+        </tr>
     </tbody>
 </table>
 
