@@ -15,15 +15,17 @@
     <tr>
         <th>Name</th>
         <th>Email</th>
-        <th>Administrator</th>
         <th ng-show="isAdmin()">Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="user in users | orderBy:'displayName'">
-        <td><strong>{{ user.displayName }}</strong> <span ng-show="isLoggedIn(user)" class="badge badge-info">You</span></td>
+        <td>
+            <span ng-show="isLoggedIn(user)" class="badge badge-info">You</span>
+            <strong>{{ user.displayName }}</strong>
+            <span ng-show="user.isAdmin" class="label label-default">administrator</span>
+        </td>
         <td>{{ user.email }}</td>
-        <td>{{ user.isAdmin }}</td>
         <td ng-show="isAdmin()">
             <button class="btn btn-sm btn-default" ng-click="editUser(user)"><i class="icon-edit"></i> Edit</button>
             <button class="btn btn-sm btn-danger" ng-show="!isLoggedIn(user)" ng-click="deleteUser(user)"><i class="icon-trash"></i> Delete</button>
