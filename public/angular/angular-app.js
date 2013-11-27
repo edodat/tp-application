@@ -9,6 +9,7 @@ angular.module('app', ['ui.bootstrap', 'restangular'])
             .when('/login',                 { templateUrl: 'static/partials/auth/',         controller: 'LoginCtrl', noAuth: true })
             .when('/',                      { templateUrl: 'static/partials/dashboard/',    controller: 'DashboardCtrl' })
             .when('/people',                { templateUrl: 'static/partials/people/',       controller: 'PeopleCtrl' })
+            .when('/projects',              { templateUrl: 'static/partials/projects/',     controller: 'ProjectsCtrl' })
             .otherwise({ redirectTo: '/' });
 
         // On AJAX calls return, intercept 401 errors to redirect to login page

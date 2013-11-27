@@ -1,0 +1,45 @@
+<!-- Error messages -->
+<alert ng-repeat="error in errors" type="'error'" close="errors.splice($index, 1)"><i class="icon-warning-sign"></i> {{error}}</alert>
+
+<!-- Projects list -->
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th ng-show="isAdmin()">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="project in projects | orderBy:'name'">
+            <td>
+                <span ng-hide="isEditing(project)">{{ project.name }}</span>
+                <form ng-show="isEditing(project)" name="editProjectForm" novalidate>
+                    <input name="name" type="text" placeholder="Enter project name" ng-model="editingProject.name" required />
+                </form>
+            </td>
+            <td>
+                <div ng-hide="isEditing(project)">
+                    <button class="btn btn-sm btn-default" ng-click="displayEditForm(project)"><i class="icon-edit"></i> Edit</button>
+                    <button class="btn btn-sm btn-danger" ng-click="deleteProject(project)"><i class="icon-trash"></i> Delete</button>
+                </div>
+                <div ng-show="isEditing(project)">
+                    <button class="btn btn-primary" ng-click="saveProject(editingProject)" ng-disabled="editProjectForm.$invalid">Save</button>
+                    <button class="btn btn-sm btn-link" ng-click="resetEditForm()">Cancel</button>
+                </div>
+            </td>
+        </tr>
+        <tr ng-show="isCreating">
+            <td>
+                <form name="createProjectForm" novalidate>
+                    <input name="name" type="text" placeholder="Enter project name" ng-model="newProject.name" required />
+                </form>
+            </td>
+            <td>
+                <button class="btn btn-primary" ng-click="createProject()" ng-disabled="createProjectForm.$invalid">Add</button>
+                <button class="btn btn-sm btn-link" ng-click="resetCreateForm()">Cancel</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<a ng-hide="isCreating" ng-click="displayCreateForm()">Add a project...</a>

@@ -69,6 +69,11 @@ app.post('/api/users', controllers.auth.checkIsAdmin(), controllers.users.create
 app.put('/api/users/:_id', controllers.auth.checkIsAdmin(), controllers.users.updateUser);
 app.del('/api/users/:_id', controllers.auth.checkIsAdmin(), controllers.users.deleteUser);
 
+app.get('/api/projects', controllers.projects.getProjects);
+app.post('/api/projects',controllers.projects.createProject);
+app.put('/api/projects/:_id', controllers.projects.updateProject);
+app.del('/api/projects/:_id', controllers.projects.deleteProject);
+
 
 //////////////////
 // START SERVER //
